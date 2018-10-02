@@ -110,14 +110,14 @@ plus(1, 2) #3
 plus(y=2, x=3) #5
 
 is_odd <- function(x){
-  i %% 2 == 1
+  x %% 2 == 1
 }
 
 is_odd(1) #TRUE
 is_odd(2) #FALSE
 
 is_odd <-  function(x){
-  if(i %% 2 == 1){
+  if(x %% 2 == 1){
     'this number is odd'
   } else {
     'this number is even'
@@ -126,7 +126,7 @@ is_odd <-  function(x){
 
 #the same function can be written as ifelse(condition, if_true, if_false)
 is_odd <-  function(x){
-  ifelse(i %% 2 == 1, 'this number is odd', 'this number is even')
+  ifelse(x %% 2 == 1, 'this number is odd', 'this number is even')
 }
 
 #integrate

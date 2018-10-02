@@ -135,4 +135,99 @@ stringr::str_sub('а роза упала на лапу азора', 1:26, 1:26)
 stringr::str_sub('мат и тут и там', 1:15, 15:1)
 stringr::str_sub(b, -3, -1) # form the end
 
-#
+# transliteration
+stringi::stri_trans_general('Garik', 'latin-cyrillic')
+stringi::stri_trans_general('Гарик Мороз', 'cyrillic-latin')
+stringi::stri_trans_general('Garik', 'latin-greek')
+stringi::stri_trans_general('Garik', 'latin-armenian')
+
+# make strings look shorter
+s <- 'a string which is considered to be too long'
+stringr::str_trunc(s, 20, 'right')
+stringr::str_trunc(s, 20, 'left')
+stringr::str_trunc(s, 20, 'center')
+
+# make strings look longer
+w <- 'too short'
+stringr::str_pad(w, 20, 'right')
+stringr::str_pad(w, 20, 'left')
+stringr::str_pad(w, 20, 'both')
+
+# identify language
+udhr_24 <- c('Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.',
+             'Toute personne a droit au repos et aux loisirs, y compris une limitation raisonnable du temps de travail et des congés payés périodiques.',
+             'Каждый человек имеет право на отдых и досуг, включая разумное ограничение рабочего времени и периодических отпусков.',
+             'לכל אחד יש את הזכות לנוח ולפנאי, כולל הגבלה סבירה של שעות עבודה וחגים תקופתיים עם שכר.',
+             '每個人都有權休息和休閒，包括合理限制工作時間和定期帶薪休假。',
+             '모든 사람은 합당한 근무 시간 제한과 정기적 인 휴일 휴가를 포함하여 휴식과 여가를 누릴 권리가 있습니다.',
+             'प्रत्येक व्यक्ति को आराम और अवकाश का अधिकार है, जिसमें कामकाजी घंटों की उचित सीमा और वेतन के साथ आवधिक छुट्टियां शामिल हैं।')
+install.packages('cld2')
+install.packages('cld3')
+cld2::detect_language(udhr_24)
+cld2::detect_language(udhr_24, lang_code = FALSE) # full language names
+cld3::detect_language(udhr_24)
+cld2::detect_language('Ты женат? Говорите ли по-английски?') #bulgarian((
+cld3::detect_language('Ты женат? Говорите ли по-английски?') # no idea ((
+cld2::detect_language('Хливкие шорьки Пырялись по наве, И хрюкотали зелюки, Как мюмзики в мове.') #works
+cld3::detect_language('Хливкие шорьки Пырялись по наве, И хрюкотали зелюки, Как мюмзики в мове.') #works
+cld2::detect_language("Варчилось, хлив'язкi тхурки викрули, свербчись навкрузi, жасумновiлi худоки гривiли зехряки в чузi") # no idea
+cld3::detect_language("Варчилось, хлив'язкi тхурки викрули, свербчись навкрузi, жасумновiлi худоки гривiли зехряки в чузi") # works
+cld2::detect_language_mixed('мы не используем code mixing on daily basis') # mixed languages
+cld3::detect_language_mixed('мы не используем code mixing on daily basis') # mixed languages
+
+# string distance measaures
+stringdist::stringdist('корова', 'корова')
+stringdist::stringdist('коровы', c('корова', 'осёл', 'курица'))
+stringdist::stringdistmatrix(c('башкирия', 'республика карачаево-черкессия', 'татарстан'), c('башкиртостан', 'республика татарстан', 'карачаево-черкесская республика'))
+stringdist::stringsim('коровы', c('корова', 'осёл', 'курица')) # from 0 to 1
+stringdist::amatch(c('коровы', 'быки'), c('корова', 'быки', 'курица'))
+stringdist::ain(c('осы', 'корова'), c('тигр', 'ослы', 'коровы', 'попугай', 'осы')) # maxdist din't work((
+
+# special symbols
+a <- 'всем известно что 45\\2 + 3$ + 5 = 17$7 Да? Ну хорошо (а то я не был уверен.) [{^|^}]'
+stringr::str_view_all(a, '$') # nothing found - $ is reserved for the beginning of the line
+stringr::str_view_all(a, '\\$')
+stringr::str_view_all(a, '\\.')
+stringr::str_view_all(a, '\\*')
+stringr::str_view_all(a, '\\+')
+stringr::str_view_all(a, '\\?')
+stringr::str_view_all(a, '\\^')
+stringr::str_view_all(a, '\\)')
+stringr::str_view_all(a, '\\(')
+stringr::str_view_all(a, '\\[')
+stringr::str_view_all(a, '\\]')
+stringr::str_view_all(a, '\\{')
+stringr::str_view_all(a, '\\}')
+stringr::str_view_all(a, '\\|')
+stringr::str_view_all(a, '\\\\')
+
+
+# regular expressions in R
+stringr::str_view_all('два 15 42, 42 15, 37 08 5, 20 20 20!', '\\d') #\\d = all the digits
+stringr::str_view_all('два 15 42, 42 15, 37 08 5, 20 20 20!', '\\D') #\\D = everything except the digits
+stringr::str_view_all('два 15 42, 42 15, 37 08 5, 20 20 20!', '\\s') #\\s = spaces, tabs etc
+stringr::str_view_all('два 15 42, 42 15, 37 08 5, 20 20 20!', '\\S') #\\S = everything except spaces, tabs
+stringr::str_view_all('два 15 42, 42 15, 37 08 5, 20 20 20!', '\\w') #\\w = words (everything between spaces and punctuation)
+stringr::str_view_all('Умей мечтать, не став рабом мечтанья', '[оауыэюияёе]') # vowels
+stringr::str_view_all('И мыслить, мысли не обожествив', '[^оауыэюияёе]') # everyting except vowels
+stringr::str_view_all('два 15 42, 42 15, 37 08 5, 20 20 20!', '[4-9]') # numbers from 4 to 9
+stringr::str_view_all('карл у клары украл кораллы, а клара у карла украла кларнет', '[а-я]') # cyrillic non capital letters
+stringr::str_view_all('Карл у Клары украл кораллы, а Клара у Карла украла кларнет', '[A-я]') # cyrillic letters
+stringr::str_view_all('The quick fox jumps over the lazy dog.', '[A-z]') # latin letters
+stringr::str_view_all('два 15 42, 42 15, 37 08 5, 20 20 20!', '[^4-9]') # everything but 456789
+stringr::str_view_all('Карл у Клары украл кораллы, а Клара у Карла украла кларнет','лар|рал|арл')
+stringr::str_view_all('Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Саньку в бок, Соньку в лоб, все в сугроб.', '[Сс].н') # . - any symbol
+stringr::str_view_all('от топота копыт пыль по полю летит', '^о') # ^ - at the beginning of the string
+stringr::str_view_all('у ужа - ужата, у ежа - ежата', 'жата$') # $ - at the end of the string
+
+  # quantification in regular expressions in R
+stringr::str_view_all('хорошее длинношеее животное', 'еее?') #? means not necessary
+stringr::str_view_all('хорошее длинношеее животное', 'ее*') # * means zero ore more times
+stringr::str_view_all('хорошее длинношеее животное', 'е+') # + means one or more times
+stringr::str_view_all('хорошее длинношеее животное', 'е{2}') # {n} means exactly n times
+stringr::str_view_all('хорошее длинношеее животное', 'е{1,}') # {n,m} means from n to m times #no space is allowed {n, m} is wrong
+stringr::str_view_all('хорошее длинношеее животное', 'е{1,2}') # {n,m} means from n to m times
+stringr::str_view_all('Пушкиновед, Леромнтовед, Леромнтововед', '(ов)+') # () groups symbols
+stringr::str_view_all('красноватый, беловатый, розоватый, розововатй', '(ов)+')
+stringr::str_view_all('Пушкиновед, Леромнтовед, Леромнтововед', 'в.*ед') # .* means repeat . zero or more times between в and the last ед (greedy quantifier)
+stringr::str_view_all('Пушкиновед, Леромнтовед, Леромнтововед', 'в.*?ед') # .*? means repeat . zero or more times between в and ед - stop after first ед found (not greedy quantifier)
