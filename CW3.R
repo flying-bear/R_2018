@@ -97,7 +97,7 @@ stringr::str_c(rus_abc, lat_abc, sep = '*', collapse = '_') #"А*A_Б*B_В*C_Г*
 a <- c('the quick', 'brown fox', 'jumps', 'over the lazy dog')
 grep('the', a) # gives back indices where found
 grep('the', a, value = TRUE) # gives back elements where found
-grep('the', a, invert = TRUE) # does not give back indices where found
+grep('the', a, invert = TRUE) # gives back indices where not found
 grep('the', a, invert = TRUE, value = TRUE)
 grepl('the', a) # logical TRUE if found FALSE else
 
