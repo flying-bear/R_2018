@@ -103,7 +103,7 @@ homo_cor %>%
   arrange(desc(cor))
 
 ## Pearson's, Spearman's and Kendall's correlation coefficients
-df <- ...
+df <- data.frame(x = rnorm(n = 100, mean = 100, sd = 25), y = rnorm(n = 100, mean = 100, sd = 25))
 
 df %>% 
   ggplot(aes(x, y))+
